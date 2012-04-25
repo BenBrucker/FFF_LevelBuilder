@@ -16,10 +16,9 @@ public class Level implements Graph	{
 	private Direction[] directions = {Direction.north,Direction.east,Direction.south,Direction.west};
 	
     
-	
 	public Level(int[][] grid, int rows, int columns, ArrayList<Point> goals)	{
 		this.grid = grid;
-		this.gridCopy = new int[grid.length][];
+		this.gridCopy = new int[rows][columns];
 		this.rows = rows;
 		this.columns = columns;
 		this.goals = goals;
@@ -94,6 +93,8 @@ public class Level implements Graph	{
 			while (canMove)	{
 				if (destRow < 0 || destRow >= this.rows ||
 					destCol < 0 || destCol >= this.columns ||
+					row < 0 || row >= this.rows ||
+					column < 0 || column >= this.columns ||
 							gridCopy[destRow][destCol] != 0)
 						canMove = false;
 				if (canMove)	{
@@ -111,6 +112,8 @@ public class Level implements Graph	{
 	@Override
 	public boolean isGoal() {
 		boolean isDone = true;
+		if (goals.size() == 0)
+			return false;
 		for (Point p : goals)	{
 			if (grid[p.x][p.y] == 0)	{
 				isDone = false;
@@ -174,7 +177,12 @@ public class Level implements Graph	{
 
 	@Override
 	public int getHeuristic() {
-		// TODO Auto-generated method stub
-		return 0;
+		int heuristic = 0;
+		for (Point p : goals)	{
+			if (grid[p.x][p.y] != 0)	{
+				heuristic += 10; //TODO Better Heuristic
+			}
+		}
+		return heuristic;
 	}
 }

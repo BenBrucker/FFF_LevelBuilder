@@ -32,11 +32,12 @@ public class Solver
     	hash.add(toAdd.hashCode());
     }
 	
+	
 	/**
 	 *  Will solve the current graph. 
 	 *  @return Returns success and failure messages.
 	 */
-	public String solve () 
+	public int solve () 
     {
         while (! toExamine.isEmpty() ) 
         {
@@ -46,7 +47,7 @@ public class Solver
             if (current.isGoal())
             {
             	System.out.println(next);
-                return "Succes! Steps needed: " + next.length();
+                return next.length();
             } 
             else 
             {
@@ -57,6 +58,6 @@ public class Solver
                 }
             }
         }
-        return "Failure! No possible path that will solve this puzzle";
+        return 0;
     }
 }
