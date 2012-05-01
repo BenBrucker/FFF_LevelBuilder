@@ -20,7 +20,7 @@ public class LevelChecker implements Runnable {
 	/** This array holds all files this checker will save levels in */
 	private BufferedWriter[] out;
 	/** The maximum amount of steps to be checked */
-	private final int MAX_STEPS = 50;
+	private final int MAX_STEPS = 100;
 	/** The maximum number of solutions that will be found */
 	private final int MAX_SOLUTIONS = 200;
 	/** Counter for the number of found solutions */
@@ -86,7 +86,7 @@ public class LevelChecker implements Runnable {
 		int steps = solver.solve();
 		if (steps > 0)	{
 			if (out[steps] == null)	{
-				out[steps] = new BufferedWriter(new FileWriter(".\\" + level.getRows() + "x"+level.getColumns() + "steps" + steps + ".txt"));
+				out[steps] = new BufferedWriter(new FileWriter(".\\l" + level.getRows() + "x"+level.getColumns() + "steps" + steps + ".txt"));
 			}
 			out[steps].write(level.toString());
 			System.out.println(level);

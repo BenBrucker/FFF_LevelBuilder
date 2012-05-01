@@ -18,7 +18,7 @@ public class LevelBuilder implements Runnable {
 	public final static Random rand = new Random();
 	
 	/** The Probabilities for all blocks */
-	private final int HORI_PROB = 10, VERT_PROB = 10, ANY_PROB = 15, IMMO_PROB = 45, NOBOX_PROB = 85, GOAL_PROB = 15; 
+	private final int HORI_PROB = 15, VERT_PROB = 15, ANY_PROB = 10, IMMO_PROB = 45, NOBOX_PROB = 85, GOAL_PROB = 15; 
 	
 	/** The added values of all probabilities to create categories */
 	private final int CAT_1 = HORI_PROB, CAT_2 = CAT_1 + VERT_PROB, CAT_3 = CAT_2 + IMMO_PROB, CAT_4 = CAT_3 + ANY_PROB, CAT_5 = CAT_4 + GOAL_PROB;
