@@ -13,7 +13,7 @@ public class Solver
 {
 	/** The queue of nodes that will be considered solutions */
 	@SuppressWarnings("rawtypes")
-	PriorityQueue<Node> toExamine;
+	Queue<Node> toExamine;
 	
 	/** A hash set that will track solutions to prevent duplicates */
 	HashSet<Integer> hash;
@@ -25,7 +25,7 @@ public class Solver
 	@SuppressWarnings("rawtypes")
 	public Solver(Graph graph) 
     {
-    	toExamine = new PriorityQueue<Node>();
+    	toExamine = new LinkedList<Node>();
     	Node<Graph> toAdd = new Node<Graph>(null, graph);
     	toExamine.add(toAdd);
     	hash = new HashSet<Integer>();

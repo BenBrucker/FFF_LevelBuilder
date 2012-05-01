@@ -227,6 +227,6 @@ public class Level implements Graph	{
 	
 	/** Getter for the columns */
 	public int getColumns()	{
-		return rows;
+		return columns;
 	}
 }

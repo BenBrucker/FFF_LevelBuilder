@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Main {
 	/** The dimensions of a level */
-	private final static int ROW_DIMENSION = 5;
+	private final static int ROW_DIMENSION = 8;
 	private final static int COLUMN_DIMENSION = 5;
 	
 	/**
