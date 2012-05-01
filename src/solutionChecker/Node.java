@@ -58,14 +58,13 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>>
     
     @Override
     public String toString() 
-    {/*
+    {
     	if (previous != null)
     	{
     		return previous.toString() + "\n" + item;
     	}
     	else 
-    		return "Start Configuration:\n" + item.toString();*/
-    	return " ";
+    		return "Start Configuration:\n" + item.toString();
     }
 
 	@Override

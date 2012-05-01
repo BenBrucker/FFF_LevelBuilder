@@ -46,15 +46,16 @@ public class Solver
             Graph current = next.getItem();
             if (current.isGoal())
             {
-            	System.out.println(next);
+            	//System.out.println(next);
                 return next.length();
             } 
             else 
             {
                 for (Graph succ: current.successors()) 
                 {
-                	if (hash.add(succ.hashCode()))
+                	if (hash.add(succ.hashCode()))	{
                 		toExamine.add(new Node<Graph>(next, succ));
+                	}
                 }
             }
         }

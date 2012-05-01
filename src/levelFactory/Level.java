@@ -6,24 +6,45 @@ import java.util.Collection;
 import solutionChecker.Graph;
 import levelFactory.Direction;
 
+/**
+ * A Level holds all information about the position of all Blocks.
+ * It implements Graph so it will be solvable by an Artifical Intelligence function working with Graphs
+ * @author Ben Brucker
+ */
 public class Level implements Graph	{
+	/** The grid of blocks as integer representation */
 	private int[][] grid;
+	/** A private temporary copy of grid, so grid won't be modified */
 	private int[][] gridCopy;
+	/** The amount of rows and columns in this level */
 	private int rows,columns;
+	/** An array that holds the coordinates of the goal squares. */
 	private ArrayList<Point> goals;
-		
-	private int heuristicValue;
+	/** The Heuristic value of this Graph TODO Not yet used */
+	private int heuristicValue = 0;
+	/** An array of all 4 possible directions, for the ease of looping through them */
 	private Direction[] directions = {Direction.north,Direction.east,Direction.south,Direction.west};
 	
-    
+    /**
+     * Constructor for a level
+     * @param grid the position and type of the blocks that this level contains
+     * @param rows the amount of rows of this level
+     * @param columns the amount of columns of this level
+     * @param goals An array list holding the coordinates of the goal squares
+     */
 	public Level(int[][] grid, int rows, int columns, ArrayList<Point> goals)	{
-		this.grid = grid;
+		this.grid = new int[rows][columns];
+		multiArrayCopy(grid, this.grid);
 		this.gridCopy = new int[rows][columns];
 		this.rows = rows;
 		this.columns = columns;
 		this.goals = goals;
 	}
 	
+	/**
+	 * Gets the integer representation of this level
+	 * @return the grid that holds the integer representation of this level
+	 */
 	public int[][] getLevel()	{
 		return grid;
 	}
@@ -35,11 +56,15 @@ public class Level implements Graph	{
 			for (int j = 0; j < columns; j++)	{
 				s.append(grid[i][j]);
 				if (j == (columns - 1))
-					s.append("\n");
+					s.append("\\n");
 			}
+		for (Point goal : goals)
+			s.setCharAt(goal.x * (columns + 2) + goal.y, '5');
+		s.append("\n");
 		return s.toString();
 	}
-
+	
+	/** Compares this graph to another graph. TODO: Not yet working correctly since heuristics are missing */
     @Override
     public int compareTo(Graph g) throws NullPointerException
     {
@@ -53,6 +78,7 @@ public class Level implements Graph	{
         	return 1;
     }
 
+    /** Gets all successors of this graph by trying to tilt it in all 4 directions */
 	@Override
 	public Collection<Graph> successors () 
     {
@@ -62,13 +88,15 @@ public class Level implements Graph	{
          }
          return successors;
     }
-
+	
+	/**
+	 * Gets the result of tilting this level in a certain direction
+	 * @param d the direction this level gets tilted in.
+	 * @return a new Level containing a tilted version of this level.
+	 */
 	public Level tilt(Direction d) {
-		multiArrayCopy(grid, gridCopy);	
-		boolean isDone = false;
+		multiArrayCopy(grid, gridCopy);
 		int row = 0, column = 0;
-		while (!isDone)	{
-			isDone = true;
 			for (int i = 0; i < this.rows; i++)	{
 				for (int j = 0; j < this.columns; j++)	{
 					switch (d)	{
@@ -79,15 +107,20 @@ public class Level implements Graph	{
 					}
 					if (gridCopy[row][column] != 0)
 						moveBlock(row, column, d);
-				}
 			}	
 		}
 		return new Level(gridCopy, this.rows, this.columns, goals);
 	}
 	
+	/**
+	 * This function moves a single block as far as possible in the indicated direction
+	 * @param row the inital row of this block
+	 * @param column the initial column of this block
+	 * @param d the direction this block should move in.
+	 */
 	private void moveBlock(int row, int column, Direction d)	{
 		int destRow = row + Direction.getYOffset(d);
-		int destCol = row + Direction.getXOffset(d);
+		int destCol = column + Direction.getXOffset(d);
 		if (BlockMover.moveBlock(gridCopy[row][column], d))	{
 			boolean canMove = true;
 			while (canMove)	{
@@ -95,7 +128,7 @@ public class Level implements Graph	{
 					destCol < 0 || destCol >= this.columns ||
 					row < 0 || row >= this.rows ||
 					column < 0 || column >= this.columns ||
-							gridCopy[destRow][destCol] != 0)
+					gridCopy[destRow][destCol] != 0)
 						canMove = false;
 				if (canMove)	{
 					gridCopy[destRow][destCol] = gridCopy[row][column];
@@ -109,6 +142,7 @@ public class Level implements Graph	{
 		}
 	}
 	
+	/** Checks whether this level is done */
 	@Override
 	public boolean isGoal() {
 		boolean isDone = true;
@@ -123,12 +157,18 @@ public class Level implements Graph	{
 		return isDone;
 	}
 	
+	/**
+	 * Copies an integer array
+	 * @param source the source array
+	 * @param destination the target array
+	 */
 	public void multiArrayCopy(int[][] source,int[][] destination)
 	{
 		for (int a=0;a<source.length;a++)	{
 			System.arraycopy(source[a],0,destination[a],0,source[a].length);
 		}
 	}
+
     @Override
     public int hashCode()
     {
@@ -156,7 +196,7 @@ public class Level implements Graph	{
         	{
         		for (int column = 0; column < this.columns; column++)
         		{
-        			if (lvl.getTile(row,column) != grid[row][column])
+        			if (lvl.getBlock(row,column) != grid[row][column])
         				return false;
         		}
         	}
@@ -165,24 +205,28 @@ public class Level implements Graph	{
  	}
     
     /**
-     * Gets the tilenumber at x and y.
-     * @param x: The x coordinate of the tile.
-     * @param y: The y-coordinate of the tile.
-     * @return the number of the tile corresponding to the coordinates.
+     * Gets the block at x and y.
+     * @param x: The row coordinate of the tile.
+     * @param y: The column-coordinate of the tile.
+     * @return the number of the block corresponding to the coordinates.
      */
-    public int getTile(int x, int y)
+    public int getBlock(int x, int y)
     {
     	return grid[x][y];
     }
 
 	@Override
 	public int getHeuristic() {
-		int heuristic = 0;
-		for (Point p : goals)	{
-			if (grid[p.x][p.y] != 0)	{
-				heuristic += 10; //TODO Better Heuristic
-			}
-		}
-		return heuristic;
+		return 0; //TODO Find a good Heuristic
+	}
+	
+	/** Getter for the rows */
+	public int getRows()	{
+		return rows;
+	}
+	
+	/** Getter for the columns */
+	public int getColumns()	{
+		return rows;
 	}
 }
