@@ -56,10 +56,10 @@ public class Level implements Graph	{
 			for (int j = 0; j < columns; j++)	{
 				s.append(grid[i][j]);
 				if (j == (columns - 1))
-					s.append("\\n");
+					s.append("\n");
 			}
 		for (Point goal : goals)
-			s.setCharAt(goal.x * (columns + 2) + goal.y, '5');
+			s.setCharAt(goal.x * (columns + 1) + goal.y, '5');
 		s.append("\n");
 		return s.toString();
 	}
