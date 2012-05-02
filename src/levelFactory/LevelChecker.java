@@ -51,7 +51,11 @@ public class LevelChecker implements Runnable {
 				}
 			} 
 		}
-		catch (InterruptedException | IOException ex)	{
+		catch (InterruptedException ex)	{
+			ex.printStackTrace();
+			System.err.println("Consumer failed: " + ex.getLocalizedMessage());
+		}
+		catch (IOException ex)	{
 			ex.printStackTrace();
 			System.err.println("Consumer failed: " + ex.getLocalizedMessage());
 		}
@@ -86,7 +90,7 @@ public class LevelChecker implements Runnable {
 		int steps = solver.solve();
 		if (steps > 0)	{
 			if (out[steps] == null)	{
-				out[steps] = new BufferedWriter(new FileWriter(".\\l" + level.getRows() + "x"+level.getColumns() + "steps" + steps + ".txt"));
+				out[steps] = new BufferedWriter(new FileWriter(".\\l" + level.getColumns() + "x"+level.getRows() + "steps" + steps + ".txt"));
 			}
 			out[steps].write(level.toString());
 			System.out.println(level);
